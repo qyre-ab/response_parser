@@ -2,11 +2,17 @@ import 'package:fpdart/fpdart.dart';
 
 part 'response_parser_helpers.dart';
 
+/// {@template response_parser}
 /// Response Parser makes it easier to parse data and error response from server.
 ///
 /// You can write this:
 /// ```dart
-/// 
+/// Future<Either<User, ApiFailure>> fetchUser() async {
+///   return parseApiResponse(
+///     requestAction: () => dio.get('/user'),
+///     mapper: User.fromJson,
+///   );
+/// }
 /// ```
 /// Instead of writing this boring code all the time
 /// ```dart
@@ -39,8 +45,7 @@ part 'response_parser_helpers.dart';
 ///   }
 /// }
 /// ```
-///
-/// For example your server returns such response:
+/// To do so you need to do a little preparation. For example lets assume your server returns such response:
 /// ```json
 /// {
 ///   "data": {
@@ -82,7 +87,17 @@ part 'response_parser_helpers.dart';
 ///   },
 /// );
 /// ```
+/// And create top level [parseApiResponse], [parseListApiResponse] and [parseEmptyApiResponse] functions.
+/// ```dart
+/// final parseApiResponse = _exampleResponseParser.parseApiResponse;
+/// final parseListApiResponse = _exampleResponseParser.parseListApiResponse;
+/// final parseEmptyApiResponse = _exampleResponseParser.parseEmptyApiResponse;
+/// ```
+/// That's all!\
+/// For more info you can take a look at example.
+/// {@endtemplate}
 class ResponseParser<Response, Failure> {
+  /// {@macro response_parser}
   const ResponseParser({
     required this.dataExtractor,
     required this.failureParser,
@@ -93,6 +108,11 @@ class ResponseParser<Response, Failure> {
   final FailureParser<Failure, Response> failureParser;
   final ErrorCatcher<Failure> errorCatcher;
 
+  /// This method parses [Failure] or [Data] from [Response].
+  ///
+  /// {@template parse_response_parameters_description}
+  /// It gains [requestAction] which will be immediately executed and [mapper] to parse [Data] from json.
+  /// {@endtemplate}
   Future<Either<Failure, Data>> parseApiResponse<Data>({
     required RequestAction<Response> requestAction,
     required JsonMapper<Data> mapper,
@@ -113,9 +133,12 @@ class ResponseParser<Response, Failure> {
     });
   }
 
-  Future<Either<Failure, List<T>>> parseListApiResponse<T>({
+  /// This method parses [Failure] or List of [Data] from [Response].
+  ///
+  /// {@macro parse_response_parameters_description}
+  Future<Either<Failure, List<Data>>> parseListApiResponse<Data>({
     required RequestAction<Response> requestAction,
-    required JsonMapper<T> mapper,
+    required JsonMapper<Data> mapper,
   }) async {
     final responseEither = await _tryMakeRequest(
       requestAction: requestAction,
@@ -133,6 +156,9 @@ class ResponseParser<Response, Failure> {
     });
   }
 
+  /// This method parses [Failure] from response if any.
+  ///
+  /// It gains [requestAction] which will be immediately executed.
   Future<Option<Failure>> parseEmptyApiResponse({
     required RequestAction<Response> requestAction,
   }) async {
@@ -152,15 +178,22 @@ class ResponseParser<Response, Failure> {
   }
 }
 
+/// Typedef for function which returns data (List or Map) from [Response].
 typedef DataExtractor<Response> = Object Function(Response response);
+
+/// Typedef for function which parses [Failure] from [Response].
 typedef FailureParser<Failure, Response> = Failure? Function(
   Response response,
 );
+
+/// Typedef for function which handles catched [error] and [stackTrace].
 typedef ErrorCatcher<Failure> = Failure Function(
   Object error,
   StackTrace stackTrace,
 );
 
-typedef JsonMapper<T> = T Function(Map<String, dynamic> json);
+/// Typedef for [json] to [Data] parser.
+typedef JsonMapper<Data> = Data Function(Map<String, dynamic> json);
 
+/// Typedef for api request which returns [Response].
 typedef RequestAction<Response> = Future<Response> Function();
