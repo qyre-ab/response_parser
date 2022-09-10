@@ -5,7 +5,7 @@ publish_to: none
 # homepage: https://www.example.com
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.3 <3.0.0"
 
 dev_dependencies:
   build_runner: ^2.2.0
@@ -16,6 +16,6 @@ dev_dependencies:
 
 dependencies:
   dio: ^4.0.6
-  response_parser: 
+  response_parser:
     path: ../
   freezed_annotation: ^2.1.0
