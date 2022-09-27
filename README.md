@@ -96,3 +96,6 @@ final parseEmptyApiResponse = _exampleResponseParser.parseEmptyApiResponse;
 ```
 That's all!\
 For more info you can take a look at example.
+
+# Sponsors
+![Qyre Logo](assets/LogoQyre.png)

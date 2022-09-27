@@ -1,5 +1,6 @@
 part of 'response_parser.dart';
 
+/// Internal
 T _dataParser<T>(Object data, JsonMapper<T> mapper) {
   assert(
     data is Map<String, dynamic>,
@@ -9,6 +10,7 @@ T _dataParser<T>(Object data, JsonMapper<T> mapper) {
   return mapper(data as Map<String, dynamic>);
 }
 
+/// Internal
 List<T> _listDataParser<T>(Object data, JsonMapper<T> mapper) {
   assert(
     data is List && data.every((element) => element is Map<String, dynamic>),
@@ -19,6 +21,7 @@ List<T> _listDataParser<T>(Object data, JsonMapper<T> mapper) {
   return (data as List).map((e) => mapper(e as Map<String, dynamic>)).toList();
 }
 
+/// Internal
 Future<Either<Failure, Response>> _tryMakeRequest<Failure, Response>({
   required RequestAction<Response> requestAction,
   required ErrorCatcher<Failure> errorCatcher,
@@ -31,6 +34,7 @@ Future<Either<Failure, Response>> _tryMakeRequest<Failure, Response>({
   }
 }
 
+/// Internal
 Either<Failure, Data> _parseResponse<Failure, Data, Response>(
   Response response, {
   required _DataParser<Data> dataParser,
@@ -56,4 +60,5 @@ Either<Failure, Data> _parseResponse<Failure, Data, Response>(
   }
 }
 
+/// Internal
 typedef _DataParser<T> = T Function(Object data);
