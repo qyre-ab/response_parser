@@ -1,6 +1,6 @@
 name: response_parser
 description: Response Parser makes it easier to parse data and error response from server
-version: 1.0.0
+version: 1.0.0+1
 repository: https://github.com/qyre-ab/response_parser
 
 environment:
