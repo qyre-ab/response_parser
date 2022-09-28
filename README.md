@@ -1,8 +1,8 @@
-Response Parser makes it easier to parse data and error response from server.
+Response Parser makes it easier to parse data and error responses from the server.
 
 ## Getting started
 
-Do you want to write this pretty functions...
+Do you want to write pretty functions like this...
 ```dart
 Future<Either<User, ApiFailure>> fetchUser() async {
   return parseApiResponse(
@@ -46,9 +46,9 @@ Then continue reading!
 
 ## Usage
 
-To do so you need to do a little preparation.\
-For example lets assume your server returns such response:
-```json
+To do so, you need to do a little preparation.\
+For example, let's assume your server returns such response:
+```jsonc
 {
   "data": {
     // Data you requested
@@ -95,7 +95,7 @@ final parseListApiResponse = _exampleResponseParser.parseListApiResponse;
 final parseEmptyApiResponse = _exampleResponseParser.parseEmptyApiResponse;
 ```
 That's all!\
-For more info you can take a look at example.
+For more info, you can take a look at the example.
 
 # Sponsors
 ![Qyre Logo](assets/LogoQyre.png)
